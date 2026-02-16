@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAG-IA | Mentoría Académica Generativa</title>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23E100FF' d='M12 2L14.5 9L22 12L14.5 15L12 22L9.5 15L2 12L9.5 9Z'/%3E%3C/svg%3E">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- GENERAL STYLES --- */
+        :root {
+            --primary: #7F00FF; /* Tech Violet */
+            --secondary: #E100FF; /* Neon Magenta */
+            --accent: #00e5ff; /* Cyan for data/tech */
+            --dark: #0f0c29;
+            --dark-surface: #1a163a;
+            --light: #ffffff;
+            --gray: #b3b3b3;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        h2 { font-size: 2.5rem; margin-bottom: 20px; font-weight: 700; }
+        p { margin-bottom: 15px; }
+
+        /* --- HEADER (Glassmorphism) --- */
+        header {
+            padding: 10px 5%; /* Reduced padding slightly for big logo */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(15, 12, 41, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ESTILO NUEVO PARA EL LOGO (IMAGEN) */
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 65px; /* Altura ajustada para el header */
+            width: auto;
+            /* Fondo blanco suave para que se lea "IES ABASTOS" sobre fondo oscuro */
+            background: rgba(255, 255, 255, 0.95);
+            padding: 5px 15px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+        }
+
+        nav ul { display: flex; gap: 15px; align-items: center; }
+
+        nav a {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            padding: 8px 18px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        nav a:hover {
+            background: rgba(225, 0, 255, 0.15);
+            border-color: var(--secondary);
+            box-shadow: 0 0 20px rgba(225, 0, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .cta-header {
+            background: var(--gradient);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(127, 0, 255, 0.4);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white !important;
+        }
+
+        .cta-header:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 30px rgba(225, 0, 255, 0.6);
+            background: linear-gradient(135deg, #9d42ff, #ff42ff);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 20px 50px; /* Aumentado padding top por el header */
+            background: radial-gradient(circle at 50% 50%, #2a1b52 0%, #0f0c29 70%);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .hero h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(127,0,255,0.3));
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
+
+        .hero-btn {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .hero-btn:hover {
+            background: var(--secondary);
+            box-shadow: 0 0 30px rgba(225, 0, 255, 0.4);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-stat-item {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .hero-stat-label { font-size: 0.9rem; color: var(--gray); }
+
+
+        /* --- SECTIONS COMMON --- */
+        .section { padding: 100px 10%; position: relative; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title span { color: var(--secondary); }
+
+        /* --- PROBLEM SECTION --- */
+        .problem { background: var(--dark-surface); }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--gradient);
+        }
+
+        .card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.08); }
+        .card i { font-size: 2rem; color: var(--secondary); margin-bottom: 20px; }
+        .card h3 { margin-bottom: 10px; font-size: 1.3rem; }
+        .card p { color: var(--gray); font-size: 0.95rem; }
+
+        /* --- SOLUTION / AWS ARCHITECTURE --- */
+        .tech-section { background: #0b091f; }
+
+        .tech-container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .tech-info { flex: 1; min-width: 300px; }
+        .tech-visual { flex: 1; min-width: 300px; display: flex; justify-content: center; }
+
+        .tech-list li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .tech-icon {
+            background: rgba(127, 0, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            color: var(--secondary);
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .aws-badge {
+            display: inline-block;
+            background: #232f3e;
+            border: 1px solid #ff9900;
+            color: #ff9900;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* --- IMPACT & SCALABILITY --- */
+        .impact { background: radial-gradient(circle at top right, #2a1b52 0%, var(--dark) 40%); }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .kpi-card {
+            background: transparent;
+            border: 1px solid var(--primary);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .kpi-val { font-size: 2.5rem; font-weight: 800; color: var(--light); }
+        .kpi-label { font-size: 0.9rem; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; }
+
+        .roadmap {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .roadmap-step {
+            flex: 1;
+            background: var(--glass-bg);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--secondary);
+            min-width: 200px;
+        }
+
+        .roadmap-year { font-size: 1.5rem; font-weight: 800; color: var(--gray); opacity: 0.5; margin-bottom: 10px; }
+
+        /* --- FOOTER / ODS --- */
+        footer {
+            background: #05040f;
+            padding: 80px 10% 40px;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .ods-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .ods-badge {
+            width: 80px; height: 80px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; color: white; border-radius: 12px;
+            font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+        .ods-badge:hover { transform: translateY(-5px); }
+        .ods-4 { background: #C5192D; }
+        .ods-5 { background: #FF3A21; }
+        .ods-8 { background: #A21942; }
+        .ods-10 { background: #DD1367; }
+
+        .credits { color: var(--gray); font-size: 0.9rem; margin-top: 30px; padding-top: 20px; border-top: 1px solid #222; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            header { padding: 15px 20px; }
+            nav { display: none; } /* Simplified for mobile */
+            .hero h1 { font-size: 2.8rem; }
+            .roadmap { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo-container">
+            <img src="logo.png" alt="MAG-IA IES Abastos" class="logo-img">
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="#reto">El Reto</a></li>
+                <li><a href="#solucion">La Solución</a></li>
+                <li><a href="#tecnologia">Tecnología AWS</a></li>
+                <li><a href="#impacto">Impacto</a></li>
+            </ul>
+        </nav>
+        <a href="#" class="cta-header">Ver Demo</a>
+    </header>
+
+    <section class="hero">
+        <div class="aws-badge">POWERED BY AWS BEDROCK</div>
+        <h1>FP sin estereotipos:<br><span>Mentoría Académica Generativa</span></h1>
+        <p>Un orientador inteligente que utiliza IA Generativa y datos reales para romper la brecha de género en la Formación Profesional Tecnológica.</p>
+
+        <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+            <a href="#solucion" class="hero-btn">Cómo funciona</a>
+            <a href="https://github.com/fp-estereotipos" target="_blank" class="hero-btn" style="border-color:white;">GitHub Repo <i class="fab fa-github"></i></a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat-item">
+                <div class="hero-stat-number">8%</div>
+                <div class="hero-stat-label">Mujeres en FP Tech</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="hero-stat-number">+250%</div>
+                <div class="hero-stat-label">Intención de Matrícula (Objetivo)</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="hero-stat-number">24/7</div>
+                <div class="hero-stat-label">Disponibilidad</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reto" class="section problem">
+        <h2 class="section-title">El Problema: <span>Talento Invisible</span></h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 50px auto; color: var(--gray);">
+            A pesar de que las profesiones tecnológicas tienen un 35% más de salario, las chicas se autoexcluyen por falta de referentes y desinformación.
+        </p>
+
+        <div class="problem-grid">
+            <div class="card">
+                <i class="fas fa-venus-mars"></i>
+                <h3>Estereotipos</h3>
+                <p>"Me imaginaba al típico hacker en una cueva oscura. Creía que no era un sitio para mí."</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-eye-slash"></i>
+                <h3>Falta de Referentes</h3>
+                <p>Si no ves mujeres exitosas en tecnología, es difícil imaginar que tú puedes ser una de ellas.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-question-circle"></i>
+                <h3>Desinformación</h3>
+                <p>Nadie explica que ciclos como DAM o ASIR también requieren creatividad, diseño y trabajo en equipo.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="tecnologia" class="section tech-section">
+        <h2 class="section-title">Solución: <span>MAG-IA & AWS</span></h2>
+
+        <div class="tech-container">
+            <div class="tech-info">
+                <h3>Arquitectura RAG (Retrieval Augmented Generation)</h3>
+                <p style="color: var(--gray);">No dejamos que la IA invente. Usamos tecnología AWS para garantizar respuestas veraces basadas en documentos oficiales del centro.</p>
+
+                <ul class="tech-list">
+                    <li>
+                        <div class="tech-icon"><i class="fas fa-brain"></i></div>
+                        <div>
+                            <strong>AWS Bedrock + Claude 3.5 Sonnet</strong>
+                            <p style="font-size: 0.85rem; color: #aaa;">Motor de razonamiento avanzado con un tono empático y natural.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tech-icon"><i class="fas fa-database"></i></div>
+                        <div>
+                            <strong>Knowledge Base Vectorial</strong>
+                            <p style="font-size: 0.85rem; color: #aaa;">Indexamos PDFs de planes de estudio y perfiles de referentes reales.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tech-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div>
+                            <strong>Guardrails & Seguridad</strong>
+                            <p style="font-size: 0.85rem; color: #aaa;">Filtros éticos para evitar sesgos y proteger la privacidad (GDPR).</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tech-visual">
+                <div style="background: var(--dark-surface); padding: 30px; border-radius: 20px; border: 1px solid var(--primary); width: 100%; max-width: 400px; position: relative;">
+                    <div style="text-align: center; margin-bottom: 20px; font-weight: bold; color: var(--accent);">FLUJO DE DATOS</div>
+
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="background: #333; padding: 10px; border-radius: 8px; text-align: center;">Usuario: "¿Es difícil ASIR?"</div>
+                        <div style="text-align: center; color: var(--gray);">⬇</div>
+                        <div style="background: #232f3e; padding: 10px; border-radius: 8px; text-align: center; color: #ff9900; border: 1px solid #ff9900;">AWS Lambda (Backend)</div>
+                        <div style="text-align: center; color: var(--gray);">⬇</div>
+                        <div style="display: flex; gap: 10px;">
+                            <div style="flex:1; background: #1a163a; padding: 10px; border-radius: 8px; border: 1px solid var(--secondary); font-size: 0.8rem; text-align: center;">Búsqueda Docs Oficiales (RAG)</div>
+                            <div style="flex:1; background: #1a163a; padding: 10px; border-radius: 8px; border: 1px solid var(--primary); font-size: 0.8rem; text-align: center;">Generación Respuesta (Claude)</div>
+                        </div>
+                        <div style="text-align: center; color: var(--gray);">⬇</div>
+                        <div style="background: var(--gradient); padding: 10px; border-radius: 8px; text-align: center; color: white;">Respuesta Empática + Datos Reales</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="impacto" class="section impact">
+        <h2 class="section-title">Impacto <span>Medible</span></h2>
+
+        <div class="impact-grid">
+            <div class="kpi-card">
+                <div class="kpi-val">+250%</div>
+                <div class="kpi-label">Intención Matrícula Tech</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-val">150+</div>
+                <div class="kpi-label">Alumnos Piloto</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-val">3.9/5</div>
+                <div class="kpi-label">Autoconfianza (Post)</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-val">42%</div>
+                <div class="kpi-label">Solicitud Mentoras</div>
+            </div>
+        </div>
+
+        <h3 style="text-align: center; margin-top: 50px;">Hoja de Ruta: Escalabilidad</h3>
+        <div class="roadmap">
+            <div class="roadmap-step">
+                <div class="roadmap-year">2025</div>
+                <h4>Fase Piloto</h4>
+                <p>Validación en 3 centros (Valencia). Ajuste de UX y entrenamiento del modelo.</p>
+            </div>
+            <div class="roadmap-step">
+                <div class="roadmap-year">2026</div>
+                <h4>Expansión Regional</h4>
+                <p>30 centros. Integración con sistemas de gestión educativa. Versiones en catalán.</p>
+            </div>
+            <div class="roadmap-step">
+                <div class="roadmap-year">2027</div>
+                <h4>Nacional / Internacional</h4>
+                <p>200 centros. Réplica del modelo en Italia y Portugal. Sostenibilidad B2B.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="ods-container">
+            <div class="ods-badge ods-4" title="Educación de Calidad">ODS 4</div>
+            <div class="ods-badge ods-5" title="Igualdad de Género">ODS 5</div>
+            <div class="ods-badge ods-8" title="Trabajo Decente">ODS 8</div>
+            <div class="ods-badge ods-10" title="Reducción Desigualdades">ODS 10</div>
+        </div>
+
+        <h3>MAG-IA: Elige por talento, no por prejuicio.</h3>
+
+        <div class="credits">
+            <p>Proyecto de Conocimiento - AWS Educate & Bedrock</p>
+            <p>Desarrollado con ❤️ por estudiantes y docentes para un futuro más justo.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling script
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
